@@ -4,6 +4,8 @@
 #include <RTClib.h>
 #include <LiquidCrystal.h>
 
+#define LED_13_PIN 13
+
 #define DHTPIN A0 
 #define DHTTYPE DHT22 
 #define BASE_PRESSURE 1012.0 //Sea level pressure in millibars. Calibrate if you must
@@ -67,6 +69,10 @@ bool showLine1OrLine2 = false;  //True for Line 1: Temperature, Humidity. False 
 
 void setup(){
   Serial.begin(9600);
+  
+  //Disable LED Pin 13 (Optional). I just hate the constant LED light.
+  pinMode(LED_13_PIN, OUTPUT);
+  digitalWrite(LED_13_PIN, LOW);
   
   //Start RTC
   Wire.begin();
