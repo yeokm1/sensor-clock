@@ -10,19 +10,19 @@
 #define DHTTYPE DHT22 
 #define BASE_PRESSURE 1012.0 //Sea level pressure in millibars. Calibrate if you must
 
-#define CONTRAST_PIN 44
-#define BACKLIGHT_PIN 46
-#define BRIGHTNESS 5
-#define CONTRAST 1
+#define CONTRAST_PIN 44  //Make sure this is on a PWM pin. I'm using the Arduino Mega 2560 R3 so values will differ for others.
+#define BACKLIGHT_PIN 46   //Make sure this is on a PWM pin
+#define BACKLIGHT_BRIGHTNESS 5  //PWM value
+#define CONTRAST 1              //PWM value
 
 #define LCD_CHAR_LENGTH 16
 
-#define UPDATE_RATE 200
+#define UPDATE_RATE 200  //milliseconds
 
 #define LCD_DEGREES_SYMBOL (char) 223
 
-#define INITIAL_DHT22_HUM 50;
-#define INITIAL_DHT22_TEMP 30; 
+#define INITIAL_DHT22_HUM 50;  //Celsius
+#define INITIAL_DHT22_TEMP 30; //Percent
 
 #define REFRESH_INTERVAL 5 //Minimum 2 seconds for DHT22 to refresh. Do not exceed 59
 #define SWAP_LINE2_Interval 15 //Must be multiple of refresh interval. Do not exceed 59
@@ -96,7 +96,7 @@ void setup(){
   pinMode(CONTRAST_PIN, OUTPUT);
   pinMode(BACKLIGHT_PIN, OUTPUT);
   analogWrite(CONTRAST_PIN,CONTRAST);
-  analogWrite(BACKLIGHT_PIN,BRIGHTNESS);
+  analogWrite(BACKLIGHT_PIN,BACKLIGHT_BRIGHTNESS);
   lcd.begin(LCD_CHAR_LENGTH, 2);
 
 
