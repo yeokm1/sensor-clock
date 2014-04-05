@@ -18,7 +18,7 @@ Just for the curious.
 
 <b>Main Parts used:</b>  
 
-1. Arduino Mega R3  (An Uno or other boards will work too)  
+1. Arduino Mega 2560 R3  (An Uno or other boards will work too)  
 2. LCM1602C LCD (From official Arduino Starter kit)  
 3. DHT22 temperature and humidity sensor  
 4. BMP180 Pressure and temperature sensor. (Temperature sensor unused)  
