@@ -19,11 +19,10 @@ Just for the curious.
 <b>Main Parts used:</b>  
 
 1. Arduino Mega R3  (An Uno or other boards will work too)  
-2. LCM1602C LCD (from official Arduino Starter kit)  
+2. LCM1602C LCD (From official Arduino Starter kit)  
 3. DHT22 temperature and humidity sensor  
-4. BMP180 Pressure and temperature sensor. (temperature unused)  
-5. Chronodot v2.1 (based on DS3231 temperature compensated RTC crystal)  
-
+4. BMP180 Pressure and temperature sensor. (Temperature sensor unused)  
+5. Chronodot v2.1 Real Time Clock. (Based on DS3231 temperature compensated RTC crystal. Temperature sensor unused.)  
 
 Optional:  
 
