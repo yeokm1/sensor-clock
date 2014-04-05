@@ -29,6 +29,7 @@ Optional:
 1. Half breadboard  
 2. 2000 mAh Lithium battery  
 3. Lipo charger  
+4. Translucent case  
 
 
 
