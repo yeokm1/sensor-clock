@@ -38,7 +38,7 @@ A Fritzing schematic. This schematic only represents the logical connections I m
 
 <b>Things to take note before modifying my code/design:</b>  
 
-1. DHT22 sensor needs at least 2 seconds to take a reading.  
+1. DHT22 sensor needs at least 2 seconds delay between readings.  
 
 2. BMP180 needs to take a temperature reading (even if you do not use it) before taking a pressure reading. Both readings need a delay of 5ms each.
 
@@ -46,7 +46,13 @@ A Fritzing schematic. This schematic only represents the logical connections I m
 
 4. One is supposed to add a pull-up resistor for the I2C bus lines SCL and SDA if more than one device (BMP180 and Chronodot) uses them. I tried without the resistor and it seems to work fine.
 
-5. A 4.7k to 10k ohm resistor should also be added between the DHT22 Vcc and Data lines. Without such a resistor, the values I get still seems reasonable to me so I did not add it. You may have to though.
+5. A 4.7k to 10k ohm resistor should also be added between the DHT22 Vcc and Data lines. Without such a resistor, the values I got still seems reasonable to me so I did not add it. You may have to though.
+
+6. I used an Arduino Mega because the front digital lines are close to the LCD headers thus reducing the wire length in the cramped enclosure. An Uno will work just as well.
+
+7. If you wish to change the LCD pins at pin 44 (Contrast) and 46 (Backlight), remember to move them to other PWM supported lines. 
+
+
 
 References and libraries:  
 
@@ -70,6 +76,3 @@ References and libraries:
 
 7. New Liquid Crystal library (for supposedly better LCD performance)  
 (https://bitbucket.org/fmalpartida/new-liquidcrystal/wiki/Home)
-
-
-
