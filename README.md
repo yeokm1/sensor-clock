@@ -37,11 +37,16 @@ Optional:
 
 A Fritzing schematic. This schematic only represents the logical connections I made. The physical connections differs due to space issues. As Fritzing does not have DHT22, BMP180 and DS3231 chronodot, I modified some existing and downloaded designs.
 
-<b>Things to take note before modifying my code:</b>  
+<b>Things to take note before modifying my code/design:</b>  
 
 1. DHT22 sensor needs at least 2 seconds to take a reading.  
 
 2. BMP180 needs to take a temperature reading (even if you do not use it) before taking a pressure reading. Both readings need a delay of 5ms each.
+
+3. BMP180 requires a 3.3V input.
+
+4. One is supposed to add a pull-up resistor for the i2c bus SCL and SDA lines if more than one device (BMP180 and Chronodot) uses them. I tried without the resistor and it seems to work fine.
+
 
 References and libraries:  
 
