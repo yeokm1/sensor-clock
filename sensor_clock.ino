@@ -24,7 +24,7 @@
 #define INITIAL_DHT22_HUM 50;  //Celsius
 #define INITIAL_DHT22_TEMP 30; //Percent
 
-#define REFRESH_INTERVAL 5 //Minimum 2 seconds for DHT22 to refresh. Do not exceed 59
+#define REFRESH_INTERVAL 5 //Minimum 5 seconds for DHT22 to refresh. Do not exceed 59
 #define SWAP_LINE2_Interval 15 //Must be multiple of refresh interval. Do not exceed 59
 
 #define THERM_ICON_REP 1
