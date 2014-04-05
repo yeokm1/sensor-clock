@@ -45,8 +45,9 @@ A Fritzing schematic. This schematic only represents the logical connections I m
 
 3. BMP180 requires a 3.3V input.
 
-4. One is supposed to add a pull-up resistor for the i2c bus SCL and SDA lines if more than one device (BMP180 and Chronodot) uses them. I tried without the resistor and it seems to work fine.
+4. One is supposed to add a pull-up resistor for the I2C bus lines SCL and SDA if more than one device (BMP180 and Chronodot) uses them. I tried without the resistor and it seems to work fine.
 
+5. A 4.7k to 10k ohm resistor should also be added between the DHT22 Vcc and Data lines. Without such a resistor, the values I get still seems reasonable to me so I did not add it. You may have to though.
 
 References and libraries:  
 
