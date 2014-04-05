@@ -10,7 +10,7 @@
 #define DHTTYPE DHT22 
 #define BASE_PRESSURE 1012.0 //Sea level pressure in millibars. Calibrate if you must
 
-#define CONTRAST_PIN 44  //Make sure this is on a PWM pin. I'm using the Arduino Mega 2560 R3 so values will differ for others.
+#define CONTRAST_PIN 44  //Make sure this is on a PWM pin. I'm using the Arduino Mega 2560 R3 so pin number will differ for others.
 #define BACKLIGHT_PIN 46   //Make sure this is on a PWM pin
 #define BACKLIGHT_BRIGHTNESS 3  //PWM value
 #define CONTRAST 1              //PWM value
