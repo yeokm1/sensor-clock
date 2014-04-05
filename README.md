@@ -9,7 +9,7 @@ Front. The temperature and humidity reading will switch to the pressure reading 
 
 ![Screen](https://raw.github.com/yeokm1/sensor-clock/master/misc/back.jpg)
 
-Backup Lithium battery and charger placed at the back due to space constraint.
+Backup Lithium battery and charger placed at the back due to space constraint. Those are erasers at the bottom to act as bumpers.
 
 ![Screen](https://raw.github.com/yeokm1/sensor-clock/master/misc/internals.jpg)
 
