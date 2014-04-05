@@ -76,3 +76,6 @@ References and libraries:
 
 7. New Liquid Crystal library (for supposedly better LCD performance)  
 (https://bitbucket.org/fmalpartida/new-liquidcrystal/wiki/Home)
+
+The MIT License (MIT)<br>
+Copyright (c) 2014-2014 Yeo Kheng Meng<br>
