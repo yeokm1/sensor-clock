@@ -5,7 +5,7 @@ A clock composed of an Arduino, temperature, humidity and pressure sensors.
 
 ![Screen](https://raw.github.com/yeokm1/sensor-clock/master/misc/front-day-temp-hum.jpg)
 
-Front. The temperature and humidity reading will switch to the pressure reading and approximate altitude at regular intervals. The DHT22 (white sensor) is placed externally to prevent heat from the Arduino from affecting the reading.
+Front. The temperature and humidity reading will switch to the pressure reading and approximate altitude at regular intervals. The white DHT22 temperature/humidity sensor is placed externally to prevent heat from the Arduino from affecting the measurement.
 
 ![Screen](https://raw.github.com/yeokm1/sensor-clock/master/misc/back.jpg)
 
@@ -21,8 +21,9 @@ Just for the curious.
 1. Arduino Mega 2560 R3  (An Uno or other boards will work too)  
 2. LCM1602C LCD (From official Arduino Starter kit)  
 3. DHT22 temperature and humidity sensor  
-4. BMP180 Pressure and temperature sensor. (Temperature sensor unused)  
-5. Chronodot v2.1 Real Time Clock. (Based on DS3231 temperature compensated RTC crystal. Temperature sensor unused.)  
+4. BMP180 Pressure and temperature sensor (Temperature sensor unused)  
+5. Chronodot v2.1 Real Time Clock (Based on DS3231 temperature compensated RTC crystal. Temperature sensor unused)
+6. 10k ohm resistor for DHT22 (4.7k ohm will work too)  
 
 Optional:  
 
@@ -47,11 +48,9 @@ A Fritzing schematic. This schematic only represents the logical connections I m
 
 4. One is supposed to add a pull-up resistor for the I2C bus lines SCL and SDA if more than one device (BMP180 and Chronodot) uses them. I tried without the resistor and it seems to work fine.
 
-5. A 4.7k to 10k ohm resistor should also be added between the DHT22 Vcc and Data lines. Without such a resistor, the values I got still seems reasonable to me so I did not add it. You may have to though.
+5. I used an Arduino Mega because the front digital lines are close to the LCD headers thus reducing the wire length in the cramped enclosure. An Uno will work just as well.
 
-6. I used an Arduino Mega because the front digital lines are close to the LCD headers thus reducing the wire length in the cramped enclosure. An Uno will work just as well.
-
-7. If you wish to change the LCD pins at pin 44 (Contrast) and 46 (Backlight), remember to move them to other PWM supported lines. 
+6. If you wish to change the LCD pins at pin 44 (Contrast) and 46 (Backlight), remember to move them to other PWM supported lines. 
 
 
 
