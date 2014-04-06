@@ -60,6 +60,7 @@ SFE_BMP180 pressure;
 RTC_DS1307 RTC;  //Code for this works although I use DS3231. For the initial time setting convenience.
 
 int prevIntervalReadingSecond = 0;
+int prevUpdateTimeSecond = 0;
 
 
 bool showLine1OrLine2 = false;  //True for Line 1: Temperature, Humidity. False for Line 2: Pressure
@@ -122,11 +123,14 @@ void loop(){
   DateTime now = RTC.now(); 
 
   int second = now.second();  
-  String dateString = generateDateTimeString(now.year(), now.month(), now.day(), now.hour(), now.minute(), now.second());
+  
+  //Update time only if second changes. Prevent needless requests to LCD
+  if(second != prevUpdateTimeSecond){
+    prevUpdateTimeSecond = second;
+    String dateString = generateDateTimeString(now.year(), now.month(), now.day(), now.hour(), now.minute(), now.second());
+    printThisOnLCDLine(dateString, 0);
+  }
 
-//   Serial.print("LCD Line 1: ");
-//  Serial.println(dateString);
-  printThisOnLCDLine(dateString, 0);
   
   
   //Every refresh interval
