@@ -54,6 +54,8 @@ A Fritzing schematic. This schematic only represents the logical connections I m
 
 7. If you wish to change the LCD pins at pin 44 (Contrast) and 46 (Backlight), remember to move them to other PWM supported lines. 
 
+8. Auto power off of lcd and sensors at set times. Can disable by setting TURN_OFF_AT_TIMES to false.
+
 
 
 References and libraries:  
@@ -78,6 +80,9 @@ References and libraries:
 
 7. New Liquid Crystal library (for supposedly better LCD performance)  
 (https://bitbucket.org/fmalpartida/new-liquidcrystal/wiki/Home)
+
+8. Ports library from jeelibs to save power during delay  
+(https://github.com/jcw/jeelib)
 
 The MIT License (MIT)<br>
 Copyright (c) 2014-2014 Yeo Kheng Meng<br>
