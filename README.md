@@ -19,7 +19,7 @@ Just for the curious.
 <b>Main Parts used:</b>  
 
 1. Arduino Mega 2560 R3  (An Uno or other boards will work too)  
-2. LCM1602C LCD (From official Arduino Starter kit)  
+2. LCD based on Hitachi HD44780  
 3. DHT22 temperature and humidity sensor  
 4. BMP180 Pressure and temperature sensor (Temperature sensor unused)  
 5. Chronodot v2.1 Real Time Clock (Based on DS3231 temperature compensated RTC crystal. Temperature sensor unused)
@@ -46,11 +46,13 @@ A Fritzing schematic. This schematic only represents the logical connections I m
 
 3. BMP180 requires a 3.3V input.
 
-4. One is supposed to add a pull-up resistor for the I2C bus lines SCL and SDA if more than one device (BMP180 and Chronodot) uses them. I tried without the resistor and it seems to work fine.
+4. I set the DHT22 to use the 3.3V input although it can technically work on 5V. It seems to give more accurate readings from a 3.3V source.
 
-5. I used an Arduino Mega because the front digital lines are close to the LCD headers thus reducing the wire length in the cramped enclosure. An Uno will work just as well.
+5. One is supposed to add a pull-up resistor for the I2C bus lines SCL and SDA if more than one device (BMP180 and Chronodot) uses them. I tried without the resistor and it seems to work fine.
 
-6. If you wish to change the LCD pins at pin 44 (Contrast) and 46 (Backlight), remember to move them to other PWM supported lines. 
+6. I used an Arduino Mega because the front digital lines are close to the LCD headers thus reducing the wire length in the cramped enclosure. An Uno will work just as well.
+
+7. If you wish to change the LCD pins at pin 44 (Contrast) and 46 (Backlight), remember to move them to other PWM supported lines. 
 
 
 
