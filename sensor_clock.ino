@@ -18,11 +18,21 @@
 #define LCD_CHAR_LENGTH 16
 
 #define UPDATE_RATE 200  //milliseconds
+#define UPDATE_RATE_WHEN_OFF 30000 //30 seconds Cannot more than a minute if not may miss the turn on time
 
 #define LCD_DEGREES_SYMBOL (char) 223
 
 #define REFRESH_INTERVAL 5 //Minimum 5 seconds for DHT22 to refresh. Do not exceed 59
 #define SWAP_LINE2_Interval 15 //Must be multiple of refresh interval. Do not exceed 59
+
+
+#define OFF_HOUR 17
+#define OFF_MIN 53
+
+#define ON_HOUR 18
+#define ON_MIN 00
+
+#define TURN_OFF_AT_TIMES true  //Set to false if you don't want the screen and readings to stop at certain times.
 
 #define THERM_ICON_REP 1
 #define HUM_ICON_REP 2
@@ -30,26 +40,26 @@
 //Icons from http://www.instructables.com/id/Clock-with-termometer-using-Arduino-i2c-16x2-lcd-D/
 byte thermIcon[8] = //icon for thermometer
 {
-    B00100,
-    B01010,
-    B01010,
-    B01110,
-    B01110,
-    B11111,
-    B11111,
-    B01110
+  B00100,
+  B01010,
+  B01010,
+  B01110,
+  B01110,
+  B11111,
+  B11111,
+  B01110
 };
 
 byte humIcon[8] = //icon for humidity
 {
-    B00100,
-    B00100,
-    B01010,
-    B01010,
-    B10001,
-    B10001,
-    B10001,
-    B01110,
+  B00100,
+  B00100,
+  B01010,
+  B01010,
+  B10001,
+  B10001,
+  B10001,
+  B01110,
 };
 
 
@@ -61,9 +71,11 @@ RTC_DS1307 RTC;  //Code for this works although I use DS3231. For the initial ti
 
 int prevIntervalReadingSecond = 0;
 int prevUpdateTimeSecond = 0;
-
+int prevUpdateTurnOnAndOffMinute = 0;
 
 bool showLine1OrLine2 = false;  //True for Line 1: Temperature, Humidity. False for Line 2: Pressure
+
+bool currentlyOn = true;
 
 void setup(){
   Serial.begin(9600);
@@ -103,12 +115,12 @@ void setup(){
   
   printThisOnLCDLine("By:", 1);
   printThisOnLCDLine("Yeo Kheng Meng", 2);
- 
+
 
   //Start DTT
   dht.begin();
   
- 
+
   //Start BMP180
   if (pressure.begin()){
     Serial.println("BMP180 init success");
@@ -118,23 +130,26 @@ void setup(){
 }
 
 void loop(){
-  
-  delay(UPDATE_RATE);
   DateTime now = RTC.now(); 
 
-  int second = now.second();  
-  
-  //Update time only if second changes. Prevent needless requests to LCD
-  if(second != prevUpdateTimeSecond){
-    prevUpdateTimeSecond = second;
-    String dateString = generateDateTimeString(now.year(), now.month(), now.day(), now.hour(), now.minute(), now.second());
-    printThisOnLCDLine(dateString, 0);
-  }
 
-  
-  
+  int second = now.second();  
+  int minute = now.minute();
+  int hour = now.hour();
+
+  if(currentlyOn){
+
+  //Update time only if second changes. Prevent needless requests to LCD
+    if(second != prevUpdateTimeSecond){
+      prevUpdateTimeSecond = second;
+      String dateString = generateDateTimeString(now.year(), now.month(), now.day(), now.hour(), now.minute(), now.second());
+      printThisOnLCDLine(dateString, 0);
+    }
+
+
+
   //Every refresh interval
-  if((second % REFRESH_INTERVAL) == 0 && second != prevIntervalReadingSecond){
+    if((second % REFRESH_INTERVAL) == 0 && second != prevIntervalReadingSecond){
       //Prevent multiple readings every interval
       prevIntervalReadingSecond = second;
       Serial.println();
@@ -152,58 +167,91 @@ void loop(){
       int measureDelay;
 
       // You must first get a temperature measurement to perform a pressure reading.
- 
-      measureDelay = pressure.startTemperature();
-    
-     delay(measureDelay);
 
-     double BMPTemp;
-     int status = pressure.getTemperature(BMPTemp);
+      measureDelay = pressure.startTemperature();
+
+      delay(measureDelay);
+
+      double BMPTemp;
+      int status = pressure.getTemperature(BMPTemp);
 
      // Print out the measurement:
       
-     Serial.print("BMP180 readings: ");
-     Serial.print(BMPTemp,2);
-     Serial.print(" deg C, ");
+      Serial.print("BMP180 readings: ");
+      Serial.print(BMPTemp,2);
+      Serial.print(" deg C, ");
       
      // Start a pressure measurement:
      // The parameter is the oversampling setting, from 0 to 3 (highest res, longest wait).
      // If request is successful, the number of ms to wait is returned.
      // If request is unsuccessful, 0 is returned.
-     measureDelay = pressure.startPressure(0);
+      measureDelay = pressure.startPressure(0);
 
-     delay(measureDelay);
-     
-     double BMPPress;
-     status = pressure.getPressure(BMPPress,BMPTemp);
-     Serial.print("abs pressure: ");
-     Serial.print(BMPPress,2);
-     Serial.print(" mb, ");
+      delay(measureDelay);
 
-     float BMPAlt = pressure.altitude(BMPPress,BASE_PRESSURE);
-     Serial.print("computed altitude: ");
-     Serial.print(BMPAlt,0);
-     Serial.println(" meters");
+      double BMPPress;
+      status = pressure.getPressure(BMPPress,BMPTemp);
+      Serial.print("abs pressure: ");
+      Serial.print(BMPPress,2);
+      Serial.print(" mb, ");
+
+      float BMPAlt = pressure.altitude(BMPPress,BASE_PRESSURE);
+      Serial.print("computed altitude: ");
+      Serial.print(BMPAlt,0);
+      Serial.println(" meters");
 
 
-    if((second % SWAP_LINE2_Interval) == 0){
+      if((second % SWAP_LINE2_Interval) == 0){
         showLine1OrLine2 = !showLine1OrLine2;
-    }
-    
-    
-    String lcdLine2;
-    
-    if(showLine1OrLine2){
+      }
+
+
+      String lcdLine2;
+
+      if(showLine1OrLine2){
        generateAndPrintTempHumString(DHTTemp, DHTHum); 
-    } else {
-        lcdLine2 = generatePressureString(BMPPress, BMPAlt);
-        printThisOnLCDLine(lcdLine2, 1);
-    }
+      } else {
+       lcdLine2 = generatePressureString(BMPPress, BMPAlt);
+       printThisOnLCDLine(lcdLine2, 1);
+      }
     
 
 
   }
+}
+
+//Prevent too many execution since only need to check once a minute
+if(TURN_OFF_AT_TIMES && prevUpdateTurnOnAndOffMinute != minute){
+  prevUpdateTurnOnAndOffMinute= minute;
   
+  Serial.println("Checking time");
+  if(currentlyOn){
+    
+    if(hour == OFF_HOUR && minute == OFF_MIN){
+      currentlyOn = false;
+      lcd.noDisplay();
+      delay(UPDATE_RATE_WHEN_OFF);
+      return;
+    }
+    
+    delay(UPDATE_RATE);
+  } else {
+
+    if(hour == ON_HOUR && minute == ON_MIN){
+      currentlyOn = true;
+      lcd.display();
+      delay(UPDATE_RATE);
+      return;
+    }
+
+
+    delay(UPDATE_RATE_WHEN_OFF);
+  }
+} else {
+  
+    delay(UPDATE_RATE);
+
+}
 
 }
 
@@ -264,8 +312,8 @@ void printThisOnLCDLine(String text, int line){
 
   //Clear current line only if the new line cannot occupy the old line
   if(text.length() < LCD_CHAR_LENGTH){
-      lcd.setCursor (0, line);  
-      lcd.print("                "); 
+    lcd.setCursor (0, line);  
+    lcd.print("                "); 
   }
 
   lcd.setCursor (0, line);  
@@ -290,7 +338,7 @@ String generateDateTimeString(int year, int month, int day, int hour, int minute
   
   sprintf(buff, "%02d", day);
   String dayString = buff;
-    
+
   String monthString = getMonth(month);
   
   if(0 <= second && second <= 40){
@@ -306,7 +354,7 @@ String generateDateTimeString(int year, int month, int day, int hour, int minute
 // From http://stackoverflow.com/a/21235587
 String getDayOfTheWeek(int y, int m, int d) {
   String weekdayname[] = {"Sun", "Mon", "Tue",
-        "Wed", "Thu", "Fri", "Sat"};
+  "Wed", "Thu", "Fri", "Sat"};
 
   int weekday = (d+=m<3?y--:y-2,23*m/9+d+4+y/4-y/100+y/400)%7;
   
