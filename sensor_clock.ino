@@ -26,10 +26,10 @@
 #define SWAP_LINE2_Interval 15 //Must be multiple of refresh interval. Do not exceed 59
 
 
-#define OFF_HOUR 17
-#define OFF_MIN 53
+#define OFF_HOUR 01
+#define OFF_MIN 00
 
-#define ON_HOUR 18
+#define ON_HOUR 06
 #define ON_MIN 00
 
 #define TURN_OFF_AT_TIMES true  //Set to false if you don't want the screen and readings to stop at certain times.
