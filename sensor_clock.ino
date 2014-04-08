@@ -12,8 +12,8 @@
 
 #define CONTRAST_PIN 44  //Make sure this is on a PWM pin. I'm using the Arduino Mega 2560 R3 so pin number will differ for others.
 #define BACKLIGHT_PIN 46   //Make sure this is on a PWM pin
-#define BACKLIGHT_BRIGHTNESS 3   //PWM value
-#define CONTRAST 1              //PWM value
+#define BACKLIGHT_BRIGHTNESS 0   //PWM value  I don't need the backlight so set to 0
+#define CONTRAST 0              //PWM value  You may need to change this value
 
 #define LCD_CHAR_LENGTH 16
 
