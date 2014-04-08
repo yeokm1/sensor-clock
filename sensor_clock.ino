@@ -1,8 +1,12 @@
+#include <RF12.h> 
+#include <JeeLib.h>
+#include <PortsLCD.h> //Replaces the LiquidCrystal.h
+
 #include <Wire.h>
 #include <DHT.h>
 #include <SFE_BMP180.h>
 #include <RTClib.h>
-#include <LiquidCrystal.h>
+
 
 #define LED_13_PIN 13
 
@@ -13,24 +17,23 @@
 #define CONTRAST_PIN 44  //Make sure this is on a PWM pin. I'm using the Arduino Mega 2560 R3 so pin number will differ for others.
 #define BACKLIGHT_PIN 46   //Make sure this is on a PWM pin
 #define BACKLIGHT_BRIGHTNESS 0   //PWM value  I don't need the backlight so set to 0
-#define CONTRAST 0              //PWM value  You may need to change this value
+#define CONTRAST 0             //PWM value  You may need to change this value
 
 #define LCD_CHAR_LENGTH 16
-
-#define UPDATE_RATE 200  //milliseconds
-#define UPDATE_RATE_WHEN_OFF 30000 //30 seconds Cannot more than a minute if not may miss the turn on time
 
 #define LCD_DEGREES_SYMBOL (char) 223
 
 #define REFRESH_INTERVAL 5 //Minimum 5 seconds for DHT22 to refresh. Do not exceed 59
 #define SWAP_LINE2_Interval 15 //Must be multiple of refresh interval. Do not exceed 59
 
+#define SLEEP_INTERVAL 250 //0.25s
+#define SLEEP_LONG_INTERVAL 45000 //45s
 
 #define OFF_HOUR 01
 #define OFF_MIN 00
 
 #define ON_HOUR 06
-#define ON_MIN 00
+#define ON_MIN 30
 
 #define TURN_OFF_AT_TIMES true  //Set to false if you don't want the screen and readings to stop at certain times.
 
@@ -68,6 +71,8 @@ LiquidCrystal lcd(26, 30, 34, 38, 42, 50);
 DHT dht(DHTPIN, DHTTYPE);
 SFE_BMP180 pressure;
 RTC_DS1307 RTC;  //Code for this works although I use DS3231. For the initial time setting convenience.
+ISR(WDT_vect) { Sleepy::watchdogEvent(); } // Setup for low power waiting
+
 
 int prevIntervalReadingSecond = 0;
 int prevUpdateTimeSecond = 0;
@@ -220,40 +225,51 @@ void loop(){
   }
 }
 
-//Prevent too many execution since only need to check once a minute
-if(TURN_OFF_AT_TIMES && prevUpdateTurnOnAndOffMinute != minute){
-  prevUpdateTurnOnAndOffMinute= minute;
+
+
+
+  //Prevent too many execution since only need to check once a minute
+  if(TURN_OFF_AT_TIMES && prevUpdateTurnOnAndOffMinute != minute){
+    prevUpdateTurnOnAndOffMinute= minute;
   
-  Serial.println("Checking time");
-  if(currentlyOn){
+    Serial.println("Checking time");
+    if(currentlyOn){
     
-    if(hour == OFF_HOUR && minute == OFF_MIN){
-      currentlyOn = false;
-      lcd.noDisplay();
-      delay(UPDATE_RATE_WHEN_OFF);
-      return;
-    }
+      if(hour == OFF_HOUR && minute == OFF_MIN){
+        currentlyOn = false;
+        lcd.noDisplay();
+        longSleep();
+      }
     
-    delay(UPDATE_RATE);
-  } else {
+   } else {
 
     if(hour == ON_HOUR && minute == ON_MIN){
       currentlyOn = true;
       lcd.display();
-      delay(UPDATE_RATE);
-      return;
+
+    } else {
+      longSleep();
     }
 
-
-    delay(UPDATE_RATE_WHEN_OFF);
-  }
-} else {
+   }
+  } 
   
-    delay(UPDATE_RATE);
+
+ shortSleep();
+
 
 }
 
+void shortSleep(){
+   Sleepy::loseSomeTime(SLEEP_INTERVAL);    
+        
 }
+
+
+void longSleep(){
+  Sleepy::loseSomeTime(SLEEP_LONG_INTERVAL);
+}
+
 
 void generateAndPrintTempHumString(float temp, float hum){
 
