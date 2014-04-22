@@ -3,15 +3,15 @@ sensor-clock
 
 A clock composed of an Arduino, temperature, humidity and pressure sensors.
 
-![Screen](https://raw.github.com/yeokm1/sensor-clock/master/misc/front-day-temp-hum.jpg)
+![Screen](/misc/front-day-temp-hum.jpg)
 
 Front. The temperature and humidity reading will switch to the pressure reading and approximate altitude at regular intervals. The white DHT22 temperature/humidity sensor is placed externally to prevent heat from the Arduino from affecting the measurement.
 
-![Screen](https://raw.github.com/yeokm1/sensor-clock/master/misc/back.jpg)
+![Screen](misc/back.jpg)
 
 Backup Lithium battery and charger placed at the back due to space constraint. Those are erasers at the bottom to act as bumpers.
 
-![Screen](https://raw.github.com/yeokm1/sensor-clock/master/misc/internals.jpg)
+![Screen](misc/internals.jpg)
 
 Just for the curious.
 
@@ -34,7 +34,7 @@ Optional:
 
 
 
-![Screen](https://raw.github.com/yeokm1/sensor-clock/master/misc/sensor clock schematic.png)
+![Screen](/misc/sensor clock schematic.png)
 
 A Fritzing schematic. This schematic only represents the logical connections I made. The physical connections differs due to space issues. As Fritzing does not have DHT22, BMP180 and DS3231 chronodot, I modified some existing and downloaded designs.
 
